@@ -1,18 +1,23 @@
 package com.sumin.readcontacts
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.ContactsContract.Contacts
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val permissionGranted = ActivityCompat.checkSelfPermission(
+            this, android.Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
 
-        requestContacts()
+        if (permissionGranted) requestContacts()
+        else Log.d("MainActivity", "Permission denied")
     }
 
     private fun requestContacts() {
